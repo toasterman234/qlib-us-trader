@@ -1,11 +1,11 @@
 """
-Alpha158 純 K 線因子
+Alpha158 price/volume factors
 
-基於 Qlib Alpha158 因子集設計，使用純價格和成交量資料。
-共計約 95 個因子。
+Based on the Qlib Alpha158 factor set; uses price and volume data only.
+~95 factors total.
 """
 
-# 時間窗口
+# Time windows
 WINDOWS = [5, 10, 20, 30, 60]
 
 # =============================================================================
@@ -16,66 +16,66 @@ WINDOWS = [5, 10, 20, 30, 60]
 KBAR_FACTORS = [
     {
         "name": "kbar_kmid",
-        "display_name": "K棒中位",
+        "display_name": "K-bar Mid",
         "category": "technical",
         "expression": "($close - $open) / $open",
-        "description": "收盤相對開盤的變化率",
+        "description": "rate of change of close vs open",
     },
     {
         "name": "kbar_klen",
-        "display_name": "K棒長度",
+        "display_name": "K-bar Length",
         "category": "technical",
         "expression": "($high - $low) / $open",
-        "description": "日內振幅相對開盤價",
+        "description": "intraday range relative to open",
     },
     {
         "name": "kbar_kmid2",
-        "display_name": "K棒中位2",
+        "display_name": "K-bar Mid 2",
         "category": "technical",
         "expression": "($close - $open) / ($high - $low + 1e-8)",
-        "description": "收盤開盤差佔振幅比",
+        "description": "close-open difference as share of range",
     },
     {
         "name": "kbar_kup",
-        "display_name": "上影線",
+        "display_name": "Upper Shadow",
         "category": "technical",
         "expression": "($high - Greater($open, $close)) / $open",
-        "description": "上影線長度比",
+        "description": "Upper Shadow Length Ratio",
     },
     {
         "name": "kbar_kup2",
-        "display_name": "上影線2",
+        "display_name": "Upper Shadow 2",
         "category": "technical",
         "expression": "($high - Greater($open, $close)) / ($high - $low + 1e-8)",
-        "description": "上影線佔振幅比",
+        "description": "Upper Shadow to Range Ratio",
     },
     {
         "name": "kbar_klow",
-        "display_name": "下影線",
+        "display_name": "Lower Shadow",
         "category": "technical",
         "expression": "(Less($open, $close) - $low) / $open",
-        "description": "下影線長度比",
+        "description": "Lower Shadow Length Ratio",
     },
     {
         "name": "kbar_klow2",
-        "display_name": "下影線2",
+        "display_name": "Lower Shadow 2",
         "category": "technical",
         "expression": "(Less($open, $close) - $low) / ($high - $low + 1e-8)",
-        "description": "下影線佔振幅比",
+        "description": "Lower Shadow to Range Ratio",
     },
     {
         "name": "kbar_ksft",
-        "display_name": "K棒偏移",
+        "display_name": "K-bar Shift",
         "category": "technical",
         "expression": "(2 * $close - $high - $low) / $open",
-        "description": "收盤價偏離中點比",
+        "description": "close deviation from mid ratio",
     },
     {
         "name": "kbar_ksft2",
-        "display_name": "K棒偏移2",
+        "display_name": "K-bar Shift 2",
         "category": "technical",
         "expression": "(2 * $close - $high - $low) / ($high - $low + 1e-8)",
-        "description": "收盤價偏離中點佔振幅比",
+        "description": "close deviation from mid as share of range",
     },
 ]
 
@@ -88,10 +88,10 @@ KBAR_FACTORS = [
 ROC_FACTORS = [
     {
         "name": f"roc_{w}",
-        "display_name": f"ROC_{w}日",
+        "display_name": f"ROC {w}d",
         "category": "technical",
         "expression": f"Ref($close, {w}) / $close - 1",
-        "description": f"{w}日價格變化率（歷史價/現價）",
+        "description": f"{w}-day price rate of change (past/current)",
     }
     for w in WINDOWS
 ]
@@ -105,10 +105,10 @@ ROC_FACTORS = [
 MA_RATIO_FACTORS = [
     {
         "name": f"ma_{w}",
-        "display_name": f"均線比_{w}日",
+        "display_name": f"MA Ratio {w}d",
         "category": "technical",
         "expression": f"Mean($close, {w}) / $close",
-        "description": f"{w}日均線/收盤價",
+        "description": f"{w}-day MA / close",
     }
     for w in WINDOWS
 ]
@@ -122,10 +122,10 @@ MA_RATIO_FACTORS = [
 STD_FACTORS = [
     {
         "name": f"std_{w}",
-        "display_name": f"波動率_{w}日",
+        "display_name": f"Volatility {w}d",
         "category": "technical",
         "expression": f"Std($close, {w}) / $close",
-        "description": f"{w}日價格標準差/收盤價",
+        "description": f"{w}-day price std dev / close",
     }
     for w in WINDOWS
 ]
@@ -139,10 +139,10 @@ STD_FACTORS = [
 BETA_FACTORS = [
     {
         "name": f"beta_{w}",
-        "display_name": f"斜率_{w}日",
+        "display_name": f"Slope {w}d",
         "category": "technical",
         "expression": f"Slope($close, {w}) / $close",
-        "description": f"{w}日價格回歸斜率/收盤價",
+        "description": f"{w}-day price regression slope / close",
     }
     for w in WINDOWS
 ]
@@ -156,10 +156,10 @@ BETA_FACTORS = [
 RSQR_FACTORS = [
     {
         "name": f"rsqr_{w}",
-        "display_name": f"R平方_{w}日",
+        "display_name": f"R-squared {w}d",
         "category": "technical",
         "expression": f"Rsquare($close, {w})",
-        "description": f"{w}日趨勢擬合度",
+        "description": f"{w}-day trend fit (R2)",
     }
     for w in WINDOWS
 ]
@@ -173,10 +173,10 @@ RSQR_FACTORS = [
 RESI_FACTORS = [
     {
         "name": f"resi_{w}",
-        "display_name": f"殘差_{w}日",
+        "display_name": f"Residual {w}d",
         "category": "technical",
         "expression": f"Resi($close, {w}) / $close",
-        "description": f"{w}日回歸殘差/收盤價",
+        "description": f"{w}-day regression residual / close",
     }
     for w in WINDOWS
 ]
@@ -190,10 +190,10 @@ RESI_FACTORS = [
 MAX_FACTORS = [
     {
         "name": f"max_{w}",
-        "display_name": f"最高價比_{w}日",
+        "display_name": f"High Ratio {w}d",
         "category": "technical",
         "expression": f"Max($high, {w}) / $close",
-        "description": f"{w}日最高價/收盤價",
+        "description": f"{w}-day high / close",
     }
     for w in WINDOWS
 ]
@@ -207,10 +207,10 @@ MAX_FACTORS = [
 MIN_FACTORS = [
     {
         "name": f"min_{w}",
-        "display_name": f"最低價比_{w}日",
+        "display_name": f"Low Ratio {w}d",
         "category": "technical",
         "expression": f"Min($low, {w}) / $close",
-        "description": f"{w}日最低價/收盤價",
+        "description": f"{w}-day low / close",
     }
     for w in WINDOWS
 ]
@@ -224,10 +224,10 @@ MIN_FACTORS = [
 QTLU_FACTORS = [
     {
         "name": f"qtlu_{w}",
-        "display_name": f"80分位_{w}日",
+        "display_name": f"80th Pct {w}d",
         "category": "technical",
         "expression": f"Quantile($close, {w}, 0.8) / $close",
-        "description": f"{w}日 80 分位數/收盤價",
+        "description": f"{w}-day 80th percentile / close",
     }
     for w in WINDOWS
 ]
@@ -241,10 +241,10 @@ QTLU_FACTORS = [
 QTLD_FACTORS = [
     {
         "name": f"qtld_{w}",
-        "display_name": f"20分位_{w}日",
+        "display_name": f"20th Pct {w}d",
         "category": "technical",
         "expression": f"Quantile($close, {w}, 0.2) / $close",
-        "description": f"{w}日 20 分位數/收盤價",
+        "description": f"{w}-day 20th percentile / close",
     }
     for w in WINDOWS
 ]
@@ -258,10 +258,10 @@ QTLD_FACTORS = [
 RANK_FACTORS = [
     {
         "name": f"tsrank_{w}",
-        "display_name": f"時序排名_{w}日",
+        "display_name": f"Time-series Rank {w}d",
         "category": "technical",
         "expression": f"Rank($close, {w})",
-        "description": f"收盤價在 {w} 日內的排名",
+        "description": f"close rank within {w} days",
     }
     for w in WINDOWS
 ]
@@ -275,10 +275,10 @@ RANK_FACTORS = [
 RSV_FACTORS = [
     {
         "name": f"rsv_{w}",
-        "display_name": f"RSV_{w}日",
+        "display_name": f"RSV {w}d",
         "category": "technical",
         "expression": f"($close - Min($low, {w})) / (Max($high, {w}) - Min($low, {w}) + 1e-8)",
-        "description": f"{w}日相對強弱值",
+        "description": f"{w}-day relative strength value",
     }
     for w in WINDOWS
 ]
@@ -292,10 +292,10 @@ RSV_FACTORS = [
 CNTP_FACTORS = [
     {
         "name": f"cntp_{w}",
-        "display_name": f"上漲佔比_{w}日",
+        "display_name": f"Up-Day Ratio {w}d",
         "category": "technical",
         "expression": f"Mean(Greater($close - Ref($close, 1), 0), {w})",
-        "description": f"{w}日上漲天數佔比",
+        "description": f"{w}-day up-day ratio",
     }
     for w in WINDOWS
 ]
@@ -309,10 +309,10 @@ CNTP_FACTORS = [
 CNTN_FACTORS = [
     {
         "name": f"cntn_{w}",
-        "display_name": f"下跌佔比_{w}日",
+        "display_name": f"Down-Day Ratio {w}d",
         "category": "technical",
         "expression": f"Mean(Greater(Ref($close, 1) - $close, 0), {w})",
-        "description": f"{w}日下跌天數佔比",
+        "description": f"{w}-day down-day ratio",
     }
     for w in WINDOWS
 ]
@@ -326,10 +326,10 @@ CNTN_FACTORS = [
 SUMP_FACTORS = [
     {
         "name": f"sump_{w}",
-        "display_name": f"上漲幅度_{w}日",
+        "display_name": f"Up Magnitude {w}d",
         "category": "technical",
         "expression": f"Sum(Greater($close - Ref($close, 1), 0), {w}) / (Sum(Abs($close - Ref($close, 1)), {w}) + 1e-8)",
-        "description": f"{w}日上漲幅度佔比",
+        "description": f"{w}-day up-move share",
     }
     for w in WINDOWS
 ]
@@ -343,10 +343,10 @@ SUMP_FACTORS = [
 SUMN_FACTORS = [
     {
         "name": f"sumn_{w}",
-        "display_name": f"下跌幅度_{w}日",
+        "display_name": f"Down Magnitude {w}d",
         "category": "technical",
         "expression": f"Sum(Greater(Ref($close, 1) - $close, 0), {w}) / (Sum(Abs($close - Ref($close, 1)), {w}) + 1e-8)",
-        "description": f"{w}日下跌幅度佔比",
+        "description": f"{w}-day down-move share",
     }
     for w in WINDOWS
 ]
@@ -360,13 +360,13 @@ SUMN_FACTORS = [
 SUMD_FACTORS = [
     {
         "name": f"sumd_{w}",
-        "display_name": f"漲跌差_{w}日",
+        "display_name": f"Up-Down Diff {w}d",
         "category": "technical",
         "expression": (
             f"Sum(Greater($close - Ref($close, 1), 0), {w}) / (Sum(Abs($close - Ref($close, 1)), {w}) + 1e-8) "
             f"- Sum(Greater(Ref($close, 1) - $close, 0), {w}) / (Sum(Abs($close - Ref($close, 1)), {w}) + 1e-8)"
         ),
-        "description": f"{w}日漲跌幅度差異",
+        "description": f"{w}-day up-down magnitude difference",
     }
     for w in WINDOWS
 ]
@@ -380,10 +380,10 @@ SUMD_FACTORS = [
 VMA_FACTORS = [
     {
         "name": f"vma_{w}",
-        "display_name": f"量均線比_{w}日",
+        "display_name": f"Volume MA Ratio {w}d",
         "category": "technical",
         "expression": f"Mean($volume, {w}) / ($volume + 1e-8)",
-        "description": f"{w}日成交量均線/當日成交量",
+        "description": f"{w}-day volume MA / current volume",
     }
     for w in WINDOWS
 ]
@@ -397,10 +397,10 @@ VMA_FACTORS = [
 VSTD_FACTORS = [
     {
         "name": f"vstd_{w}",
-        "display_name": f"量波動_{w}日",
+        "display_name": f"Volume Volatility {w}d",
         "category": "technical",
         "expression": f"Std($volume, {w}) / (Mean($volume, {w}) + 1e-8)",
-        "description": f"{w}日成交量變異係數",
+        "description": f"{w}-day volume coefficient of variation",
     }
     for w in WINDOWS
 ]
@@ -414,10 +414,10 @@ VSTD_FACTORS = [
 WVMA_FACTORS = [
     {
         "name": f"wvma_{w}",
-        "display_name": f"價量協變_{w}日",
+        "display_name": f"Price-Volume Covariation {w}d",
         "category": "technical",
         "expression": f"Corr($close, Log($volume + 1), {w})",
-        "description": f"{w}日價格與成交量對數相關係數",
+        "description": f"{w}-day price-volume log correlation",
     }
     for w in WINDOWS
 ]

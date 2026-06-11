@@ -159,7 +159,7 @@ export function Training() {
       s => s.week_id.startsWith(year) && s.status === 'trainable'
     )
     if (trainableWeeks.length === 0) {
-      alert(`${year} 年沒有待訓練的週`)
+      alert(`No trainable weeks for ${year}`)
       return
     }
 

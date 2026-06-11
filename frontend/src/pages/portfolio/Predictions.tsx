@@ -203,7 +203,7 @@ export function Predictions() {
                     <p className="font-semibold">Predictions Generated</p>
                     <p className="text-xs text-muted-foreground">
                       {status.prediction.created_at &&
-                        new Date(status.prediction.created_at).toLocaleString('zh-TW', {
+                        new Date(status.prediction.created_at).toLocaleString('en-US', {
                           timeZone: 'Asia/Taipei',
                         })}
                     </p>

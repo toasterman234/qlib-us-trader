@@ -232,7 +232,7 @@ export function Factors() {
                       <td className="table-cell px-5 text-right">
                         <div>
                           {factor.times_evaluated === 0 ? (
-                            <span className="text-muted-foreground text-sm">尚未評估</span>
+                            <span className="text-muted-foreground text-sm">Not evaluated</span>
                           ) : (
                             <>
                               <span className={`mono font-semibold ${factor.selection_rate >= 0.5 ? 'text-green' : 'text-muted-foreground'}`}>
