@@ -1,7 +1,7 @@
-# QLib Trader (US Fork)
+# QLib US Trader
 
 <p align="center">
-  <strong>US equity research workspace built on Qlib, FastAPI, React, and LightGBM</strong>
+  <strong>A local-first US-equity quant research workspace — factors, model training, and walk-forward backtesting in one app.</strong>
 </p>
 
 <p align="center">
@@ -13,64 +13,50 @@
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
 </p>
 
-## What this fork is
+## Screenshots
 
-This repository is a **US-only fork** of the original `qlib-tw-trader` project.
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="48%" alt="Dashboard" />
+  <img src="docs/screenshots/evaluation.png" width="48%" alt="Model evaluation" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/backtest.png" width="48%" alt="Walk-forward backtest" />
+  <img src="docs/screenshots/factors.png" width="48%" alt="Factor library" />
+</p>
 
-The goal of this fork is to turn the app into an English-first research workspace for **US equities only**.
-That means:
+<p align="center"><sub>Dashboard · model evaluation · walk-forward backtest · factor library — captured in <code>VITE_DEMO=1</code> sample-data mode.</sub></p>
 
-- no Taiwan-market product path
-- no FinMind requirement
-- no Taiwan-specific setup in the default workflow
-- no market toggle in the active runtime path
+> Want to see it yourself with no setup? Run the frontend in demo mode (`VITE_DEMO=1 npm run dev`) and the whole UI renders with sample data — no backend, no data sync, no model required. See [Demo mode](#demo-mode).
 
-## Current status
+## What it is
 
-This fork is in active conversion. It already includes:
+QLib US Trader is a self-contained research workspace for building and evaluating
+factor-based equity models on **US stocks**. It wraps Microsoft's
+[Qlib](https://github.com/microsoft/qlib) and LightGBM behind a FastAPI backend and a
+React dashboard, so the full loop — pull data → manage factors → train → backtest →
+evaluate — lives in one local app.
 
-- a US-only backend entrypoint
-- a US sync router
-- US trading calendar sync using `SPY`
-- US OHLCV sync via Yahoo Finance
-- US adjusted-close sync via Yahoo Finance
-- a curated built-in US large-cap universe
-- a simplified English-first datasets screen
-- market-aware Qlib training/export foundations already pointed at the US path
+It started as a conversion of the Taiwan-market project
+[`Docat0209/qlib-tw-trader`](https://github.com/Docat0209/qlib-tw-trader) and has been
+reworked into an English-first, US-only workspace with its own data path and dashboard.
 
-What is still incomplete:
+## Features
 
-- several non-price US dataset families are placeholders for now
-- some legacy Taiwan code still exists in the repository and is being removed
-- runtime validation and CI coverage still need to be expanded for the US-only path
-
-## Implemented US data path
-
-### Live today
-
-- **US daily OHLCV** via Yahoo Finance
-- **US adjusted close** via Yahoo Finance
-- **US trading calendar** inferred from `SPY`
-- **US large-cap starter universe** shipped with the app
-
-### Placeholder / planned
-
-- valuation snapshots
-- ownership / holdings
-- institutional flow
-- short-interest / margin-style datasets
-- revenue / broader fundamentals
-
-These placeholder dataset families are visible so the product surface is clear, but they are not yet fully implemented.
+- **Dashboard** — model IC/ICIR, return summary, prediction signals, and data-freshness at a glance.
+- **Factor library** — manage alpha factors and their Qlib expressions, with selection-rate tracking and one-click de-duplication of correlated factors.
+- **Model training** — weekly DoubleEnsemble (LightGBM) models with factor selection, driven from the UI.
+- **Walk-forward backtesting** — pick a week range, run a true walk-forward backtest, and get an equity curve, IC analysis, return metrics, and a per-week breakdown.
+- **Model evaluation** — rolling-IC and cumulative-return charts (strategy vs market), strategy stats, and CSV/JSON export.
+- **US data path** — daily OHLCV, adjusted close, and a trading calendar via Yahoo Finance, plus a curated US large-cap starter universe.
 
 ## Tech stack
 
 | Layer | Technologies |
 |-------|-------------|
 | Backend | FastAPI, SQLAlchemy, SQLite |
-| Frontend | React 18, Vite, TailwindCSS |
+| Frontend | React 18, Vite, TailwindCSS, Recharts |
 | Model | Qlib, LightGBM, DoubleEnsemble, Optuna |
-| Market Data | Yahoo Finance |
+| Market data | Yahoo Finance |
 | Realtime | WebSocket |
 
 ## Quick start
@@ -78,8 +64,8 @@ These placeholder dataset families are visible so the product surface is clear, 
 ### Docker
 
 ```bash
-git clone https://github.com/toasterman234/qlib-tw-trader.git
-cd qlib-tw-trader
+git clone https://github.com/toasterman234/qlib-us-trader.git
+cd qlib-us-trader
 cp .env.example .env
 docker compose up --build
 ```
@@ -116,11 +102,23 @@ Optional factor seeding:
 curl -X POST http://localhost:8000/api/v1/factors/seed
 ```
 
+## Demo mode
+
+To explore the interface with realistic sample data and **no backend**, start the
+frontend with the demo flag:
+
+```bash
+cd frontend
+VITE_DEMO=1 npm run dev
+```
+
+In this mode the app mocks the API and renders a full set of sample factors, a trained
+model, and a 52-week walk-forward backtest. It's how the screenshots above were
+captured. All demo numbers are fabricated for illustration only.
+
 ## Environment
 
-Example `.env.example` now contains only US-oriented defaults.
-
-Optional variables:
+`.env.example` contains US-oriented defaults. Optional variables:
 
 - `APP_TIMEZONE=America/New_York`
 - `US_UNIVERSE_FILE=/absolute/path/to/tickers.txt`
@@ -136,38 +134,31 @@ GOOGL
 META
 ```
 
-## Product direction
-
-This fork is being actively simplified into a cleaner US-equity application.
-
-Planned cleanup still in progress:
-
-- remove remaining Taiwan-only code paths from the repository
-- remove old Taiwan sync/router implementations
-- remove Taiwan-only factor families from the default product path
-- add stronger testing and CI for the US-only workflow
-- improve the model/backtest path for the US dataset set
-
 ## Architecture
 
-Current active runtime path:
+The active runtime path:
 
 - FastAPI backend
 - React frontend
-- US sync router
+- US sync router (Yahoo Finance)
 - SQLite + local model artifacts
 - Qlib export + training path
 
-The app is intended to remain a **local-first research workspace**, not a hosted platform dependency.
+The app is designed to remain a **local-first research workspace**, not a hosted
+platform dependency.
 
-## Important note on scope
+## Status & scope
 
-This fork is not yet a fully finished production-grade US quant platform. It is a focused US-only conversion of the original project with a working price-data path and ongoing cleanup.
+This is a research tool, not a production trading platform. The price-data path
+(OHLCV / adjusted close / calendar) and the full factor → train → backtest → evaluate
+loop work end to end on US equities. Some deeper fundamental dataset families
+(valuation, ownership, institutional flow, short interest, revenue) are surfaced in the
+UI as placeholders and are not yet fully wired. Nothing here is investment advice.
 
-The guiding principle is:
+## Credits
 
-> make the repo honest, usable, and clearly US-only first,
-> then expand the deeper data/model/backtest coverage.
+Built on [Microsoft Qlib](https://github.com/microsoft/qlib) and originally derived from
+[`Docat0209/qlib-tw-trader`](https://github.com/Docat0209/qlib-tw-trader).
 
 ## License
 

@@ -124,7 +124,7 @@ export function Datasets() {
   const [marginStatus, setMarginStatus] = useState<SyncStatusResponse | null>(null)
   const [adjStatus, setAdjStatus] = useState<SyncStatusResponse | null>(null)
   const [shareholdingStatus, setShareholdingStatus] = useState<SyncStatusResponse | null>(null)
-  const [securitiesLendingStatus, setSecuritiesLendingStatus] = useState<SyncStatusResponse | null>(null)
+  const [, setSecuritiesLendingStatus] = useState<SyncStatusResponse | null>(null)
   const [monthlyRevenueStatus, setMonthlyRevenueStatus] = useState<MonthlyStatusResponse | null>(null)
 
   const loadData = useCallback(async () => {
@@ -279,12 +279,6 @@ export function Datasets() {
     await syncApi.calendar('2020-01-01')
     const result = await syncApi.shareholdingAll('2020-01-01')
     checkSyncResponse(result, 'Ownership data')
-    await refreshSyncStatus()
-  }
-  const handleSecuritiesLendingRepair = async () => {
-    await syncApi.calendar('2020-01-01')
-    const result = await syncApi.securitiesLendingAll('2020-01-01')
-    checkSyncResponse(result, 'Securities lending data')
     await refreshSyncStatus()
   }
   const handleMonthlyRevenueRepair = async () => {
